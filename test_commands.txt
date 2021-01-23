@@ -1,0 +1,9 @@
+curl http://127.0.0.1:5000/update_pws -X POST --data '{"key":"test2", "value":"somethingblah"}' -H 'Content-Type: application/json'
+
+curl http://127.0.0.1:5000/login -X POST --data '{"pw":"test2"}' -H 'Content-Type: application/json'
+
+curl http://127.0.0.1:5000/login -X POST --data '{"pw":"SH3G924TU1"}' -H 'Content-Type: application/json'
+
+curl http://127.0.0.1:5000/update_pws -X POST --data '{"key":"test2", "value":"somethingblah"}' -H 'Content-Type: application/json' -H 'X-Authentication: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2MTE5NzY2NzMsImlhdCI6MTYxMTM3MTg3MywidHlwZSI6ImNsaWVudCJ9.mLYE62sdhpsNnCMtqaQIrTffhfxMw_YG7c48p_DWGMA'
+
+X-Authentication

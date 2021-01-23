@@ -1,0 +1,13 @@
+{
+    "logging": {
+        "log_level": "INFO",
+        "log_dir": "./"
+    },
+    "keys": {
+        "master": "/Users/zach.mcfadden/Documents/projects/side_stuff/zpass/6CHCD4YRU8",
+        "db": "/Users/zach.mcfadden/Documents/projects/side_stuff/zpass/BRFJSL8RFH"
+    },
+    "db": {
+        "path": "/Users/zach.mcfadden/Documents/projects/side_stuff/zpass/J4QFS205C0"
+    }
+}
