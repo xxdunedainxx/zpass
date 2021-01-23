@@ -15,6 +15,8 @@ class Config:
 
   DB_PATH: str
 
+  ASSETS_DIR: str = f"{root_dir}/client"
+
   def __init__(self):
     pass
 

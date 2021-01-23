@@ -36,4 +36,3 @@ def httpauthenticate(api):
       return {"message": "internal server error"}, 500
 
   return auth
-
