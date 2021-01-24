@@ -25,4 +25,4 @@ class APIFactory:
 
   def run(self):
     context = (f"{Config.root_dir}/example.crt", f"{Config.root_dir}/example.key")
-    APIInit.flask.run(host='0.0.0.0')
+    APIInit.flask.run(host='localhost')

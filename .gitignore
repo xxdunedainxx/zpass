@@ -1,2 +1,4 @@
 .DS_Store
 *.zp
+__pycache__
+*.pyc

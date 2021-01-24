@@ -19,7 +19,7 @@ function submitMasterkey() {
    try  {
      console.log('preparing request')
      request.onreadystatechange=getInfo;
-     request.open("POST","http://0.0.0.0:5000/login",true);
+     request.open("POST","http://localhost:5000/login",true);
      request.setRequestHeader("Content-Type", "application/json");
      request.send(JSON.stringify({pw: document.getElementById('masterkey').value}));
    }
@@ -49,7 +49,7 @@ function fetchKeys() {
    try  {
      console.log('preparing request')
      request.onreadystatechange=renderKeys;
-     request.open("GET","http://0.0.0.0:5000/get_pws",true);
+     request.open("GET","http://localhost:5000/get_pws",true);
      request.setRequestHeader("Content-Type", "application/json");
      request.setRequestHeader("X-Authentication", JWT['jwt']);
      request.send();
@@ -135,7 +135,7 @@ function submitKeys(){
    try  {
      console.log('preparing dump key request request')
      request.onreadystatechange=postDumpKeys;
-     request.open("POST","http://0.0.0.0:5000/dump_keys",true);
+     request.open("POST","http://localhost:5000/dump_keys",true);
      request.setRequestHeader("Content-Type", "application/json");
      request.setRequestHeader("X-Authentication", JWT['jwt'])
      request.send(JSON.stringify(postBuilder));
