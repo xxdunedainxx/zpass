@@ -19,7 +19,7 @@ function submitMasterkey() {
    try  {
      console.log('preparing request')
      request.onreadystatechange=getInfo;
-     request.open("POST","http://127.0.0.1:5000/login",true);
+     request.open("POST","http://0.0.0.0:5000/login",true);
      request.setRequestHeader("Content-Type", "application/json");
      request.send(JSON.stringify({pw: document.getElementById('masterkey').value}));
    }
@@ -49,7 +49,7 @@ function fetchKeys() {
    try  {
      console.log('preparing request')
      request.onreadystatechange=renderKeys;
-     request.open("GET","http://127.0.0.1:5000/get_pws",true);
+     request.open("GET","http://0.0.0.0:5000/get_pws",true);
      request.setRequestHeader("Content-Type", "application/json");
      request.setRequestHeader("X-Authentication", JWT['jwt']);
      request.send();
@@ -61,6 +61,10 @@ function fetchKeys() {
 
 function renderKeys(){
     if(request.readyState == 4) {
+    if(request.status == 401) {
+        alert('unauthorized, redirecting')
+        window.location='home.html'
+    }
     console.log('request complete?')
         var resp=JSON.parse(request.responseText);
         console.log(resp)
@@ -81,6 +85,66 @@ function keysToHTML() {
    document.getElementById('keys').innerHTML=htmlBuilder
 }
 
+function postDumpKeys(){
+    if(request.readyState == 4) {
+        console.log('request complete?')
+        var resp=JSON.parse(request.responseText);
+
+        if(request.status != 200) {
+            if(request.status == 401) {
+                alert('Unauthoried, redirecting to login page')
+                window.location='home.html'
+            }  else {
+                alert('Something went wrong..')
+                location.reload()
+            }
+        }
+
+        if(resp['message'] == 'db updated'){
+            console.log(request.responseText)
+            alert(resp['message'])
+            location.reload()
+        } else {
+            alert(("Something went wrong... " + resp['message']))
+        }
+    }
+}
+
+function submitKeys(){
+    var postBuilder = {}
+    var keys = document.getElementById('keys')
+    for(var i = 0; i < keys.children.length; i++) {
+        console.log(keys.children[i])
+        if(keys.children[i].tagName == 'DIV') {
+            var key = keys.children[i].children[0].value
+            var value = keys.children[i].children[1].value
+            if(key == 'newEntryKey') {
+                continue;
+            } else {
+               postBuilder[key] = value
+            }
+        }
+    }
+      if(window.XMLHttpRequest){
+    request=new XMLHttpRequest();
+   }
+   else if(window.ActiveXObject){
+    request=new ActiveXObject("Microsoft.XMLHTTP");
+   }
+
+   try  {
+     console.log('preparing dump key request request')
+     request.onreadystatechange=postDumpKeys;
+     request.open("POST","http://0.0.0.0:5000/dump_keys",true);
+     request.setRequestHeader("Content-Type", "application/json");
+     request.setRequestHeader("X-Authentication", JWT['jwt'])
+     request.send(JSON.stringify(postBuilder));
+   }
+   catch(e) {
+    alert("Unable to connect to server");
+   }
+
+}
 
 function getInfo(){
     if(request.readyState==4){

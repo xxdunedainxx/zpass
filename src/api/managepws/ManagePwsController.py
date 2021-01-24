@@ -32,6 +32,22 @@ class ManagerPwsController:
       raise InternalAPIError('Something went wrong :(', 500)
 
   @staticmethod
+  @flask_ref.route('/dump_keys', methods=['POST'])
+  @http_logger
+  @httpauthenticate
+  def dump_keys():
+    try:
+      LogFactory.MAIN_LOG.info('processing update request')
+      data=request.get_json()
+      db: DBManager = DBManager(Config.DB_PATH)
+      db.db = data
+      db.write_db()
+      return {'message' : 'db updated'}
+    except Exception as e:
+      LogFactory.MAIN_LOG.error(f"Failed fetching db {errorStackTrace(e)}")
+      raise InternalAPIError('Something went wrong :(', 500)
+
+  @staticmethod
   @flask_ref.route('/update_pws', methods=['POST'])
   @http_logger
   @httpauthenticate

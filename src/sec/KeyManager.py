@@ -56,7 +56,7 @@ class KeyManager:
     try:
       LogFactory.MAIN_LOG.info('===== GENERATING DB KEY =====')
       key: bytes = AESCipher.generate_key()
-      db_key_path = f"{Config.root_dir}/{RandomGenerator.generate_random_string(10)}"
+      db_key_path = f"{Config.root_dir}/../{RandomGenerator.generate_random_string(10)}.zp"
 
       FileIO.generate_byte_file(db_key_path, key)
       FileIO.lock_down_file(db_key_path)
@@ -77,7 +77,7 @@ class KeyManager:
     try:
       LogFactory.MAIN_LOG.info('===== GENERATING MASTER KEY =====')
       key: bytes=AESCipher.generate_key()
-      master_key_path = f"{Config.root_dir}/{RandomGenerator.generate_random_string(10)}"
+      master_key_path = f"{Config.root_dir}/../{RandomGenerator.generate_random_string(10)}.zp"
 
       FileIO.generate_byte_file(master_key_path, key)
       FileIO.lock_down_file(master_key_path)

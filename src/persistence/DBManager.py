@@ -25,7 +25,7 @@ class DBManager:
   def check_db_exists(self):
     if self.db_path == '' or FileIO.file_exists(self.db_path) is False:
       LogFactory.MAIN_LOG.warning('DB does not exist! Initializing!')
-      self.db_path = f"{Config.root_dir}/{RandomGenerator.generate_random_string(10)}"
+      self.db_path = f"{Config.root_dir}/../{RandomGenerator.generate_random_string(10)}.zp"
 
       nConf : dict = Config.conf_file
       nConf['db'] = {} if 'db' not in nConf.keys() else nConf['db']
