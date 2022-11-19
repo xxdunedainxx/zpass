@@ -10,6 +10,7 @@ flask_ref: Flask = APIInit.flask
 
 class RenderClientAssetController:
 
+  # TODO also make port configurable
   __setup_path: str = "html/setup.html"
   __ip_replace: str = "${MY_IP}"
   __my_ip: str = IPHelpers.my_ip()
@@ -31,9 +32,7 @@ class RenderClientAssetController:
 
   @staticmethod
   def render_setup_page():
-      rawFile: str = FileIO.read_file_content(f"{Config.ASSETS_DIR}{os.sep}{RenderClientAssetController.__setup_path}")
-      rawFile = rawFile.replace(RenderClientAssetController.__ip_replace, RenderClientAssetController.__my_ip)
-      return rawFile
+      return RenderClientAssetController.__ip_replace_file(f"{Config.ASSETS_DIR}{os.sep}{RenderClientAssetController.__setup_path}")
 
   """
   Default Renderer for the html asset controller
@@ -42,3 +41,11 @@ class RenderClientAssetController:
   def default_render(path):
       rawFile: str = f"{Config.ASSETS_DIR}{os.sep}"
       return send_from_directory(Config.ASSETS_DIR, path)
+
+  """
+  Executes a simple replace on an HTML file, replacing the IP placeholder with the host's IP
+  """
+  @staticmethod
+  def __ip_replace_file(path: str) -> str:
+      rawFile: str = FileIO.read_file_content(path)
+      return rawFile.replace(RenderClientAssetController.__ip_replace, RenderClientAssetController.__my_ip)

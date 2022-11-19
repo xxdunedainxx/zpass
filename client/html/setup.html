@@ -3,11 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <title>Setup Page</title>
+    <script src="http://${MY_IP}:5000/client/js/client.js"></script>
     <script>
-        var myIP = ${MY_IP};
+        document.addEventListener("DOMContentLoaded", function(event){
+            var myIP = "${MY_IP}";
+            pingCheckServer(myIP)
+        });
     </script>
 </head>
 <body>
-Hello
+Some basic setup page
 </body>
 </html>
