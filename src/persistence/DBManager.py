@@ -22,8 +22,11 @@ class DBManager:
   def load(self,keys):
     pass
 
+  def db_is_initialized(self):
+    return FileIO.file_exists(self.db_path) is True
+
   def check_db_exists(self):
-    if self.db_path == '' or FileIO.file_exists(self.db_path) is False:
+    if self.db_is_initialized() is False:
       LogFactory.MAIN_LOG.warning('DB does not exist! Initializing!')
       self.db_path = f"{Config.root_dir}/../{RandomGenerator.generate_random_string(10)}.zp"
 

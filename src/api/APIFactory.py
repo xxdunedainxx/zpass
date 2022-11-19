@@ -2,7 +2,7 @@ from src.api.APIInit import APIInit
 from src.api.managepws.ManagePwsController import ManagerPwsController
 from src.api.login.LoginController import LoginController
 from src.api.monitoring.MonitoringController import MonitoringController
-
+from src.api.setup.SetupController import SetupController
 from src.views.RenderClientAssetController import RenderClientAssetController
 from src.util.networking.IP import IPHelpers
 
@@ -19,6 +19,7 @@ class APIFactory:
     self.login_controller: LoginController = LoginController()
     self.client_controller: RenderClientAssetController = RenderClientAssetController()
     self.monitoring_controller: MonitoringController = MonitoringController()
+    self.setup_controller: SetupController = SetupController()
 
   def run(self):
     context = (f"{Config.root_dir}/example.crt", f"{Config.root_dir}/example.key")
