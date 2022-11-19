@@ -2,3 +2,4 @@
 *.zp
 __pycache__
 *.pyc
+.idea/

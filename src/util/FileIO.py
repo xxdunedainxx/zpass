@@ -24,7 +24,7 @@ class FileIO:
     content: str
     with open(path, 'r') as file:
       content=file.readlines()
-    return content
+    return ''.join(content)
 
   @staticmethod
   def generate_byte_file(path, bytes):
