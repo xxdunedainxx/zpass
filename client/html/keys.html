@@ -3,10 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <title>ZPass - Password Manager Keys</title>
-    <script src="http://localhost:5000/client/js/client.js"></script>
+    <script src="http://${MY_IP}:5000/client/js/core.js"></script>
+    <script src="http://${MY_IP}:5000/client/js/clients/ping_client.js"></script>
+    <script src="http://${MY_IP}:5000/client/js/clients/home_client.js"></script>
+    <script src="http://${MY_IP}:5000/client/js/clients/keys_client.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function(event){
-            fetchKeys()
+            var myIP = "${MY_IP}";
+            // Ping server ensure its up
+            pingCheckServer(myIP)
+            // Ensure setup has been done previously
+            checkSetup(myIP)
+            // fetch keys via jwt auth
+            fetchKeys(myIP)
         });
     </script>
 </head>
@@ -16,7 +25,7 @@
     <div id="keys">
 
     </div>
-     <button onclick="submitKeys()">Submit key changes</button>
+     <button onclick="submitKeys('${MY_IP}')">Submit key changes</button>
     </center>
 </body>
 </html>

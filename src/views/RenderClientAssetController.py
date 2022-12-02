@@ -12,6 +12,8 @@ class RenderClientAssetController:
 
   # TODO also make port configurable
   __setup_path: str = "html/setup.html"
+  __home_path: str = "html/home.html"
+  __keys_path: str = "html/keys.html"
   __ip_replace: str = "${MY_IP}"
   __my_ip: str = IPHelpers.my_ip()
 
@@ -22,6 +24,8 @@ class RenderClientAssetController:
   def send_html(path):
       ROUTE_TO_METHOD_MAPPING: dict = {
           RenderClientAssetController.__setup_path: RenderClientAssetController.render_setup_page,
+          RenderClientAssetController.__home_path: RenderClientAssetController.render_home_page,
+          RenderClientAssetController.__keys_path: RenderClientAssetController.render_keys_page,
           "default" : RenderClientAssetController.default_render
       }
 
@@ -33,6 +37,15 @@ class RenderClientAssetController:
   @staticmethod
   def render_setup_page():
       return RenderClientAssetController.__ip_replace_file(f"{Config.ASSETS_DIR}{os.sep}{RenderClientAssetController.__setup_path}")
+
+  @staticmethod
+  def render_home_page():
+      return RenderClientAssetController.__ip_replace_file(f"{Config.ASSETS_DIR}{os.sep}{RenderClientAssetController.__home_path}")
+
+  @staticmethod
+  def render_keys_page():
+      return RenderClientAssetController.__ip_replace_file(
+          f"{Config.ASSETS_DIR}{os.sep}{RenderClientAssetController.__keys_path}")
 
   """
   Default Renderer for the html asset controller

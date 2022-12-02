@@ -63,4 +63,8 @@ class JwtAuth():
             return JwtAuthMsg(authd=False, info={"reason": "Expired"})
         except jwt.InvalidTokenError as e:
             return JwtAuthMsg(authd=False, info={"reason": "InvalidToken"})
+
+    @staticmethod
+    def get_pw_from_auth_token(auth_token) -> str:
+        return JwtAuth.decode_auth_token(auth_token).info["pw"]
 #endregion

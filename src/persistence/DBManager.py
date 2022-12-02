@@ -1,7 +1,8 @@
+import os
+
 from src.Config import Config
 from src.util.Logging import LogFactory
 from src.util.RandomGenerator import RandomGenerator
-from  src.sec.KeyManager import KeyManager
 from src.sec.Encryption import AESCipher
 from src.util.FileIO import FileIO
 
@@ -9,26 +10,27 @@ import json
 
 class DBManager:
 
-  def __init__(self, path: str):
+  def __init__(self, path: str, key: str):
+    self.cipher = AESCipher(key=key)
     self.db_path = path
-    self.db = self.load_db()
+    self.db = self.load_db(key)
 
-  def load_db(self):
-    self.check_db_exists()
-    cipher = AESCipher(key=KeyManager.get_db_key())
-    db = json.loads(cipher.decrypt(FileIO.get_bytes_from_file(self.db_path)))
+  def load_db(self, key: str):
+    self.lazy_init_db()
+    db = json.loads(self.cipher.decrypt(FileIO.get_bytes_from_file(self.db_path)))
     return db
 
   def load(self,keys):
     pass
 
-  def db_is_initialized(self):
-    return FileIO.file_exists(self.db_path) is True
+  @staticmethod
+  def db_is_initialized(dbPath: str):
+    return FileIO.file_exists(dbPath) is True
 
-  def check_db_exists(self):
-    if self.db_is_initialized() is False:
+  def lazy_init_db(self):
+    if DBManager.db_is_initialized(self.db_path) is False:
       LogFactory.MAIN_LOG.warning('DB does not exist! Initializing!')
-      self.db_path = f"{Config.root_dir}/../{RandomGenerator.generate_random_string(10)}.zp"
+      self.db_path = f"{Config.root_dir}{os.sep}..{os.sep}{RandomGenerator.generate_random_string(10)}.zp"
 
       nConf : dict = Config.conf_file
       nConf['db'] = {} if 'db' not in nConf.keys() else nConf['db']
@@ -37,17 +39,13 @@ class DBManager:
       Config.update_config_file(nConf)
 
       self.db = {}
-      self.db['masterpass'] = RandomGenerator.generate_random_string(10)
-
-      LogFactory.MAIN_LOG.info(f"Your master password is {self.db['masterpass']}")
 
       self.write_db()
 
   def write_db(self):
-    cipher = AESCipher(key=KeyManager.get_db_key())
     FileIO.generate_byte_file(
       path=Config.DB_PATH,
-      bytes=cipher.encrypt(json.dumps(self.db))
+      bytes=self.cipher.encrypt(json.dumps(self.db))
     )
 
   # TODO tree structure
