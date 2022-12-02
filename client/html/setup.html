@@ -2,30 +2,23 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>ZPass - Password Manager Keys</title>
+    <title>Setup Page</title>
     <script src="http://${MY_IP}:5000/client/js/core.js"></script>
     <script src="http://${MY_IP}:5000/client/js/clients/ping_client.js"></script>
-    <script src="http://${MY_IP}:5000/client/js/clients/home_client.js"></script>
-    <script src="http://${MY_IP}:5000/client/js/clients/keys_client.js"></script>
+    <script src="http://${MY_IP}:5000/client/js/clients/setup_client.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function(event){
             var myIP = "${MY_IP}";
             // Ping server ensure its up
             pingCheckServer(myIP)
-            // Ensure setup has been done previously
+            // Ensure setup hasnt been done previously
             checkSetup(myIP)
-            // fetch keys via jwt auth
-            fetchKeys(myIP)
         });
     </script>
 </head>
 <body>
-    <center>
-    <h3>My Keys:</h3>
-    <div id="keys">
-
-    </div>
-     <button onclick="submitKeys('${MY_IP}')">Submit key changes</button>
-    </center>
+Some basic setup page
+<input type="text" placeholder="Please provide master key" id="masterkey"/>
+<button onclick="sendSetupRequest('${MY_IP}')">Submit</button>
 </body>
 </html>

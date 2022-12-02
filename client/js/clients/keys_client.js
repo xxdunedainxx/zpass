@@ -1,5 +1,4 @@
-console.log('MAIN CLIENT LOADED')
-console.log(document.cookie)
+console.log("Load keys client")
 
 var JWT = {}
 
@@ -7,7 +6,7 @@ if(document.cookie != '') {
  JWT = JSON.parse(document.cookie)
 }
 
-function fetchKeys() {
+function fetchKeys(ip) {
   if(JWT == '') {
     alert('you need to authenticate')
     window.location('home.html')
@@ -24,7 +23,7 @@ function fetchKeys() {
    try  {
      console.log('preparing request')
      request.onreadystatechange=renderKeys;
-     request.open("GET","http://localhost:5000/get_pws",true);
+     request.open("GET",`http://${ip}:5000/get_pws`,true);
      request.setRequestHeader("Content-Type", "application/json");
      request.setRequestHeader("X-Authentication", JWT['jwt']);
      request.send();
@@ -85,7 +84,7 @@ function postDumpKeys(){
     }
 }
 
-function submitKeys(){
+function submitKeys(ip){
     var postBuilder = {}
     var keys = document.getElementById('keys')
     for(var i = 0; i < keys.children.length; i++) {
@@ -110,7 +109,7 @@ function submitKeys(){
    try  {
      console.log('preparing dump key request request')
      request.onreadystatechange=postDumpKeys;
-     request.open("POST","http://localhost:5000/dump_keys",true);
+     request.open("POST",`http://${ip}:5000/dump_keys`,true);
      request.setRequestHeader("Content-Type", "application/json");
      request.setRequestHeader("X-Authentication", JWT['jwt'])
      request.send(JSON.stringify(postBuilder));

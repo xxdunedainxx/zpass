@@ -16,16 +16,8 @@ class AppInit:
     LogFactory.log_level = Config.LOG_LEVEL
     LogFactory.main_log()
 
-    #JwtAuth.set_jwt_algorithm()
-
-  def __check_db(self):
-    db: DBManager = DBManager(Config.DB_PATH)
-    db.check_db_exists()
-
   def run(self):
     LogFactory.MAIN_LOG.info('===== START RUNNING APPLICATION =====')
-    KeyManager.check_keys()
-    self.__check_db()
 
     api: APIFactory = APIFactory()
     api.run()

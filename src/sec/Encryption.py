@@ -1,14 +1,19 @@
-import base64
 import hashlib
 import os
+import base64
 from Crypto import Random
 from Crypto.Cipher import AES
+from src.util.FileIO import FileIO
+from src.sec.error.DbDecryptionError import DbDecryptionError
 
 class AESCipher(object):
 
   def __init__(self, key):
     self.bs = AES.block_size
-    self.key = hashlib.sha256(key).digest()
+    self.key = hashlib.sha256(self.__b64EncodeKey(key)).digest()
+
+  def __b64EncodeKey(self, key) -> bytes:
+    return base64.b64encode(str.encode(key, 'utf-8'))
 
   def encrypt(self, raw):
     raw = self._pad(raw)
@@ -25,6 +30,9 @@ class AESCipher(object):
   def _pad(self, s):
     return s + (self.bs - len(s) % self.bs) * chr(self.bs - len(s) % self.bs)
 
+  def decrypt_db(self, dbPath: str):
+    return self.decrypt(FileIO.get_bytes_from_file(dbPath))
+
   @staticmethod
   def _unpad(s):
     return s[:-ord(s[len(s) - 1:])]
@@ -32,3 +40,11 @@ class AESCipher(object):
   @staticmethod
   def generate_key() -> bytes:
     return os.urandom(16)
+
+  @staticmethod
+  def get_decrypted_db(key: str, dbPath: str):
+    try:
+      cipher = AESCipher(key)
+      return cipher.decrypt_db(dbPath)
+    except Exception as _:
+      raise DbDecryptionError()

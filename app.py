@@ -1,8 +1,3 @@
-# Ideas:
-# TODO: api layer for all of this crap
-# TODO: installer scripts
-# TODO: UI (vanilla JS + HTML + CSS)
-
 from src.AppInit import AppInit
 from src.util.errors.ErrorFactory import errorStackTrace
 

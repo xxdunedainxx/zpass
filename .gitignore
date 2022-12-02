@@ -2,3 +2,5 @@
 *.zp
 __pycache__
 *.pyc
+.idea/
+conf.json

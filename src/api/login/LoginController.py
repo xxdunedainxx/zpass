@@ -1,10 +1,9 @@
 from src.util.Logging import LogFactory
 from src.Config import Config
-from src.sec.KeyManager import KeyManager
-from src.persistence.DBManager import DBManager
 from flask import Flask, render_template, jsonify
 from src.api.APIInit import APIInit
-from src.api.AuthHandler import Authenticator
+from src.sec.Encryption import AESCipher
+from src.sec.error.DbDecryptionError import DbDecryptionError
 from src.api.decorators.HTTPLogger import http_logger
 from src.sec.JwtAuth import JwtAuth
 
@@ -23,9 +22,10 @@ class LoginController:
   def login():
     LogFactory.MAIN_LOG.info("Attempting login")
     data = request.get_json()
-    db: DBManager = DBManager(Config.DB_PATH)
-
-    if 'pw' in data.keys() and data['pw'] == db.db['masterpass']:
-      return jsonify({'message' : 'authorized','jwt' : JwtAuth.encode_auth_token()})
-    else:
+    try:
+      AESCipher.get_decrypted_db(key=data['pw'], dbPath=Config.DB_PATH)
+      return jsonify({'message': 'authorized', 'jwt': JwtAuth.encode_auth_token(custom_fields={'pw': data['pw']})})
+    except DbDecryptionError as dbEncryptError:
       return jsonify({'message': 'unauthorized'}), 401
+    except Exception as e:
+      return jsonify({'message': 'internal server error'}), 500
